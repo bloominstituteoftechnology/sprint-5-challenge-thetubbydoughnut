@@ -56,14 +56,27 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
       unli.appendChild(mentorLiItem);
     })
     
+    
+    let cards = document.querySelectorAll(".card");
+    
     h4.addEventListener("click", (evt) => {
       evt.stopPropagation();
       h4.classList.toggle("closed");
       h4.classList.toggle("open");
+      cards.forEach((otherCard) => {
+        if (otherCard !== div) {
+          otherCard.classList.remove('selected');
+          const otherH3 = otherCard.querySelector('h3');
+          otherH3.textContent = otherH3.textContent.split(',')[0];
+        }
+      })
+      div.classList.add('selected');
+
+      info.textContent = `The selected learner is ${learner.fullName}`
+      h3.textContent = `${learner.fullName}, ID ${learner.id}`
     })
-    
-    let cards = document.querySelectorAll(".card");
-    
+
+
     div.addEventListener("click", () => {
       if (!div.classList.contains('selected')) {
       cards.forEach((otherCard) => {

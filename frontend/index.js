@@ -56,60 +56,41 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
       unli.appendChild(mentorLiItem);
     })
     
-    let checkSelect = document.querySelectorAll('divCont');
-    
-    let selected = [];
-    
-    checkSelect.forEach((check) => {
-      check.addEventListener('change', () => {
-        if (check.checked) {
-          checkSelect.forEach((otherCheck) => {
-            if (otherCheck !== check) {
-              otherCheck.checked = false;
-            }
-          });
-          
-          selected = [check];
-        } else {
-          let idx = selected.indexOf(check);
-          if (idx !== -1) {
-            selected.splice(idx, 1);
-          }
-          
-          
-          if (selected.length === 0) {
-            info.textContent = "No learner is selected";
-            h3.textContent = `${learner.fullName}`
-          }
-          else if (selected.length <= 1) {
-            h3.textContent = `${learner.fullName}, ID ${learner.id}`;
-            info.textContent = `The selected learner is ${learner.fullName}`
-          }
-        }
-      })
-    })
-    
-    h4.addEventListener("click", () => {
+    h4.addEventListener("click", (evt) => {
+      evt.stopPropagation();
       h4.classList.toggle("closed");
       h4.classList.toggle("open");
     })
     
+    let cards = document.querySelectorAll(".card");
+    
     div.addEventListener("click", () => {
+      if (!div.classList.contains('selected')) {
+      cards.forEach((otherCard) => {
+        if (otherCard !== div) {
+          otherCard.classList.remove('selected');
+          const otherH3 = otherCard.querySelector('h3');
+          otherH3.textContent = otherH3.textContent.split(',')[0];
+        }
+      });
+    }
+      
       div.classList.toggle('selected')
-      // if (!evt.currentTarget === divCont) {
-        //   h3.textContent = `${learner.fullName}`
-        //   info.textContent = "No learner is selected";
-        // } else {
-          //   h3.textContent = `${learner.fullName}, ID ${learner.id}`;
-          //   info.textContent = `The selected learner is ${learner.fullName}`
-          // }
-        })
-        
-      })
-      
-      
-      const footer = document.querySelector('footer')
-      const currentYear = new Date().getFullYear()
+
+      if (div.classList.contains('selected')) {
+        info.textContent = `The selected learner is ${learner.fullName}`
+        h3.textContent = `${learner.fullName}, ID ${learner.id}`
+      } else {
+        info.textContent = "No learner is selected"
+        h3.textContent = `${learner.fullName}`
+      }
+
+    })
+  })
+  
+  
+  const footer = document.querySelector('footer')
+  const currentYear = new Date().getFullYear()
       footer.textContent = `© BLOOM INSTITUTE OF TECHNOLOGY ${currentYear - 1}`
     } catch (error) {
       console.error(error);
